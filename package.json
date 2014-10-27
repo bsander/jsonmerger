@@ -1,6 +1,6 @@
 {
   "name": "jsonmerger",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A merger for separate JSON (config) files supporting merge strategies and preprocessing",
   "main": "lib/jsonmerger.js",
   "directories": {
