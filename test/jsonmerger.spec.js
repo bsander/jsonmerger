@@ -580,14 +580,14 @@ describe('jsonMerger', function () {
         dcin.instances.unittest._strategy = 'delete';
         result = jsonMerger(['defaults']);
 
-        expect(result.instances.unittest).to.equal(null);
+        expect(result.instances.unittest).to.be.undefined;
       });
       it('should properly merge the * instances', function () {
         dcin.instances.tmptest = {};
         icin.instances['*']._strategy = 'delete';
         result = jsonMerger(['defaults', 'instances']);
 
-        expect(result.instances.tmptest).to.deep.equal(null);
+        expect(result.instances.tmptest).to.be.undefined;
       });
       it('should merge project instances in correct order (1)', function () {
         dcin.instances.unittest._strategy = 'delete';
@@ -607,26 +607,28 @@ describe('jsonMerger', function () {
         icin.instances.unittest._strategy = 'delete';
         result = jsonMerger(['defaults', 'instances']);
 
-        expect(result.instances.unittest).to.equal(null);
+        expect(result.instances.unittest).to.be.undefined;
       });
       it('should properly merge objects from the highest level', function () {
         icin._strategy = 'delete';
         result = jsonMerger(['defaults', 'instances']);
 
-        expect(result).to.equal(null);
+        expect(result).to.be.undefined;
       });
       it('should merge deeply nested project instances in correct order', function () {
         icin.instances.unittest.deeper._strategy = 'delete';
         result = jsonMerger(['defaults', 'instances']);
 
-        expect(result.instances.unittest).to.deep.equal({
-          a: dc.instances['*'].a,
-          b: dc.instances.unittest.b,
-          c: ic.instances['*'].c,
-          d: ic.instances.unittest.d,
-          x: [0, 1, 2, 3], // 0 and 1 were deleted, the rest was properly merged
-          deeper: null
+        expect(result.instances.unittest.deeper).to.be.undefined;
+      });
+      it('should not delete null values when configured', function () {
+        dcin.instances.tmptest = {};
+        icin.instances['*']._strategy = 'delete';
+        result = jsonMerger(['defaults', 'instances'], {
+          deleteNullValues: false
         });
+
+        expect(result.instances.tmptest).to.be.null;
       });
     });
   });
