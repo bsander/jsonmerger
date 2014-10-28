@@ -189,6 +189,61 @@ describe('jsonMerger', function () {
         }
       });
     });
+    it('should properly merge nested * instances', function () {
+      dcin.instances['*'].subinstances = {
+        _instances: true,
+        '*': {
+          one: 1,
+          two: 2,
+          three: 3
+        },
+        instance: {
+          three: 33,
+          four: 4
+        },
+        emptyDefault: {}
+      };
+      icin.instances['*'].subinstances = {
+        '*': {
+          two: 22
+        },
+        instance: {
+          four: 44
+        },
+        newinstance: {
+          one: 11,
+          five: 5
+        },
+        emptyInstance: {}
+      };
+      icin.instances.tmptest = {};
+
+      result = jsonMerger(files);
+      expect(result.instances.tmptest.subinstances).to.deep.equal({
+        emptyDefault: {
+          one: 1,
+          two: 22,
+          three: 3
+        },
+        emptyInstance: {
+          one: 1,
+          two: 22,
+          three: 3
+        },
+        instance: {
+          one: 1,
+          two: 22,
+          three: 33,
+          four: 44
+        },
+        newinstance: {
+          one: 11,
+          two: 22,
+          three: 3,
+          five: 5
+        }
+      });
+    });
     it('should drop the `*` instance from the config', function () {
       result = jsonMerger(files);
       expect(Object.keys(result.instances)).to.have.length(1);
