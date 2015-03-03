@@ -80,7 +80,7 @@ describe('jsonMerger', function () {
         hosts: ['prodhost'],
         config: {
           env: 'prod',
-          something: 'environments prod global something',
+          something: 'environments prod global something'
         }
       },
       dev: {
@@ -342,6 +342,19 @@ describe('jsonMerger', function () {
       result = jsonMerger(files);
       expect(result.get).to.be.a.function;
       expect(result.set).to.be.a.function;
+    });
+    it('should properly handle the replace strategy on environments', function () {
+      os.hostname = sinon.stub().returns('prodhost');
+      ecin.prod.config._strategy = 'replace';
+
+      result = jsonMerger(files);
+      delete result.get;
+      delete result.set;
+
+      expect(result).to.deep.equal({
+        env: 'prod',
+        something: 'environments prod global something'
+      });
     });
   });
   describe('using alternative merge strategy', function () {
