@@ -356,6 +356,24 @@ describe('jsonMerger', function () {
         something: 'environments prod global something'
       });
     });
+    it('should properly handle the replace strategy on environment properties', function () {
+      os.hostname = sinon.stub().returns('prodhost');
+      icin.testproperty = {
+        foo: 'bar'
+      };
+      ecin.prod.config.testproperty = {
+        _strategy: 'replace',
+        lorem: 'ipsum'
+      };
+
+      result = jsonMerger(files);
+      delete result.get;
+      delete result.set;
+
+      expect(result.testproperty).to.deep.equal({
+        lorem: 'ipsum'
+      });
+    });
   });
   describe('using alternative merge strategy', function () {
     describe('noconcat', function () {
