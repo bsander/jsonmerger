@@ -1,6 +1,6 @@
 {
   "name": "jsonmerger",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "A merger for separate JSON (config) files supporting merge strategies and preprocessing",
   "main": "lib/jsonmerger.js",
   "directories": {
@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/bsander/jsonmerger",
   "dependencies": {
-    "djson": "^0.1.0",
+    "djson": "^1.0.0",
     "lodash": "^2.4.1",
     "traverse": "^0.6.6"
   },

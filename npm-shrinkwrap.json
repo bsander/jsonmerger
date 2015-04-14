@@ -1,0 +1,27 @@
+{
+  "name": "jsonmerger",
+  "version": "1.0.0",
+  "dependencies": {
+    "djson": {
+      "version": "1.0.0",
+      "from": "djson@1.0.0",
+      "dependencies": {
+        "underscore.string": {
+          "version": "2.4.0",
+          "from": "https://registry.npmjs.org/underscore.string/-/underscore.string-2.4.0.tgz",
+          "resolved": "https://registry.npmjs.org/underscore.string/-/underscore.string-2.4.0.tgz"
+        }
+      }
+    },
+    "lodash": {
+      "version": "2.4.1",
+      "from": "lodash@*",
+      "resolved": "https://registry.npmjs.org/lodash/-/lodash-2.4.1.tgz"
+    },
+    "traverse": {
+      "version": "0.6.6",
+      "from": "traverse@*",
+      "resolved": "https://registry.npmjs.org/traverse/-/traverse-0.6.6.tgz"
+    }
+  }
+}
