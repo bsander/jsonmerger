@@ -80,7 +80,7 @@ describe('jsonMerger', function () {
         hosts: ['prodhost'],
         config: {
           env: 'prod',
-          something: 'environments prod global something',
+          something: 'environments prod global something'
         }
       },
       dev: {
@@ -475,6 +475,22 @@ describe('jsonMerger', function () {
           }
         });
       });
+      it('should properly handle the noconcat strategy on environments', function () {
+        var files = ['defaults', 'instances', 'environments'];
+        os.hostname = sinon.stub().returns('prodhost');
+        dcin.testproperty = ['foo'];
+        icin.testproperty = ['bar'];
+        ecin.prod.config = {
+          _strategy: 'noconcat',
+          testproperty: ['lorem']
+        };
+
+        result = jsonMerger(files);
+        delete result.get;
+        delete result.set;
+
+        expect(result.testproperty).to.deep.equal(['lorem']);
+      });
     });
     describe('replace', function () {
       it('should properly merge each instance with *', function () {
@@ -574,6 +590,39 @@ describe('jsonMerger', function () {
           }
         });
       });
+      it('should properly handle the replace strategy on environments', function () {
+        var files = ['defaults', 'instances', 'environments'];
+        os.hostname = sinon.stub().returns('prodhost');
+        ecin.prod.config._strategy = 'replace';
+
+        result = jsonMerger(files);
+        delete result.get;
+        delete result.set;
+
+        expect(result).to.deep.equal({
+          env: 'prod',
+          something: 'environments prod global something'
+        });
+      });
+      it('should properly handle the replace strategy on environment properties', function () {
+        var files = ['defaults', 'instances', 'environments'];
+        os.hostname = sinon.stub().returns('prodhost');
+        icin.testproperty = {
+          foo: 'bar'
+        };
+        ecin.prod.config.testproperty = {
+          _strategy: 'replace',
+          lorem: 'ipsum'
+        };
+
+        result = jsonMerger(files);
+        delete result.get;
+        delete result.set;
+
+        expect(result.testproperty).to.deep.equal({
+          lorem: 'ipsum'
+        });
+      });
     });
     describe('delete', function () {
       it('should properly merge each instance with *', function () {
@@ -629,6 +678,30 @@ describe('jsonMerger', function () {
         });
 
         expect(result.instances.tmptest).to.be.null;
+      });
+      it('should properly handle the delete strategy on environments', function () {
+        var files = ['defaults', 'instances', 'environments'];
+        os.hostname = sinon.stub().returns('prodhost');
+        ecin.prod.config._strategy = 'delete';
+
+        result = jsonMerger(files);
+        expect(result).to.be.undefined;
+      });
+      it('should properly handle the delete strategy on environment properties', function () {
+        var files = ['defaults', 'instances', 'environments'];
+        os.hostname = sinon.stub().returns('prodhost');
+        icin.testproperty = {
+          foo: 'bar'
+        };
+        ecin.prod.config.testproperty = {
+          _strategy: 'delete'
+        };
+
+        result = jsonMerger(files);
+        delete result.get;
+        delete result.set;
+
+        expect(result).not.to.have.property('testproperty');
       });
     });
   });
