@@ -1,21 +1,20 @@
 {
   "name": "jsonmerger",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "dependencies": {
     "djson": {
-      "version": "1.0.0",
-      "from": "djson@>=1.0.0 <2.0.0",
-      "resolved": "https://registry.npmjs.org/djson/-/djson-1.0.0.tgz",
+      "version": "2.0.0",
+      "from": "djson@>=2.0.0 <3.0.0",
       "dependencies": {
         "lodash": {
-          "version": "2.4.1",
-          "from": "https://registry.npmjs.org/lodash/-/lodash-2.4.1.tgz",
-          "resolved": "https://registry.npmjs.org/lodash/-/lodash-2.4.1.tgz"
+          "version": "4.0.0",
+          "from": "https://registry.npmjs.org/lodash/-/lodash-4.0.0.tgz",
+          "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.0.0.tgz"
         },
         "underscore.string": {
-          "version": "2.4.0",
-          "from": "https://registry.npmjs.org/underscore.string/-/underscore.string-2.4.0.tgz",
-          "resolved": "https://registry.npmjs.org/underscore.string/-/underscore.string-2.4.0.tgz"
+          "version": "3.2.3",
+          "from": "https://registry.npmjs.org/underscore.string/-/underscore.string-3.2.3.tgz",
+          "resolved": "https://registry.npmjs.org/underscore.string/-/underscore.string-3.2.3.tgz"
         }
       }
     },
