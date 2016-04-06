@@ -333,6 +333,22 @@ describe('jsonMerger', function () {
         }
       });
     });
+    it('should merge the wildcard properties of subsequent environments over current environment properties', function () {
+      os.hostname = sinon.stub().returns('devhost');
+
+      ecin.prod.config.instances = {
+        randomInstance: {
+          prop: null
+        }
+      };
+      ecin.dev.config.instances['*'].prop = 'foobar';
+
+      result = jsonMerger(files);
+      delete result.get;
+      delete result.set;
+
+      expect(result.instances.randomInstance.prop).to.deep.equal('foobar');
+    });
     it('should drop the `*` instance from the config', function () {
       result = jsonMerger(files);
       expect(Object.keys(result.instances)).to.have.length(1);
