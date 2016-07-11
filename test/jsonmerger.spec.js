@@ -8,9 +8,7 @@ describe('jsonMerger', function () {
   var sinon = require('sinon');
 
   var proxyquire = require('proxyquire').noCallThru();
-  var os = {
-    hostname: sinon.stub().returns('prodhost')
-  };
+  var os;
 
   var jsonMerger;
   var result;
@@ -78,6 +76,7 @@ describe('jsonMerger', function () {
       _preprocess: 'stages',
       prod: {
         hosts: ['prodhost'],
+        env: 'prodenv',
         config: {
           env: 'prod',
           something: 'environments prod global something'
@@ -86,7 +85,7 @@ describe('jsonMerger', function () {
       dev: {
         hosts: ['devhost'],
         config: {
-          env: 'dev',
+          env: 'devenv',
           instances: {
             '*': {
               x: [4],
@@ -103,6 +102,9 @@ describe('jsonMerger', function () {
 
   beforeEach(function () {
     result = undefined;
+    os = {
+      hostname: sinon.stub().returns('prodhost')
+    };
     // Input references
     dcin = defaultConfig();
     icin = instancesConfig();
@@ -306,6 +308,65 @@ describe('jsonMerger', function () {
     });
     it('should properly merge the environments file based on host (2)', function () {
       os.hostname = sinon.stub().returns('devhost');
+
+      result = jsonMerger(files);
+      delete result.get;
+      delete result.set;
+
+      expect(result).to.deep.equal({
+        env: ec.dev.config.env,
+        foo: dc.foo,
+        something: ec.prod.config.something,
+        instances: {
+          unittest: {
+            a: ec.dev.config.instances['*'].a,
+            b: dc.instances.unittest.b,
+            c: ic.instances['*'].c,
+            d: ic.instances.unittest.d,
+            x: [0, 1, 2, 3, 4],
+            deeper: {
+              zero: 0,
+              one: 1,
+              two: 2,
+              three: 3,
+              four: 4
+            }
+          }
+        }
+      });
+    });
+    it('should properly merge the environments file based on env variable (1)', function () {
+      process.env.NODE_ENV = 'prodenv'
+      os.hostname = sinon.stub().returns('localhost');
+
+      result = jsonMerger(files);
+      delete result.get;
+      delete result.set;
+
+      expect(result).to.deep.equal({
+        env: ec.prod.config.env,
+        foo: dc.foo,
+        something: ec.prod.config.something,
+        instances: {
+          unittest: {
+            a: dc.instances['*'].a,
+            b: dc.instances.unittest.b,
+            c: ic.instances['*'].c,
+            d: ic.instances.unittest.d,
+            x: [0, 1, 2, 3],
+            deeper: {
+              zero: 0,
+              one: 1,
+              two: 2,
+              three: 3
+            }
+          }
+        },
+      });
+    });
+    it('should properly merge the environments file based on env variable (2)', function () {
+      process.env.NODE_ENV = 'devenv'
+      os.hostname = sinon.stub().returns('localhost');
 
       result = jsonMerger(files);
       delete result.get;
