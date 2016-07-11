@@ -1,8 +1,8 @@
 {
   "name": "jsonmerger",
-  "version": "2.0.2",
-  "npm-shrinkwrap-version": "5.4.1",
-  "node-version": "v0.10.43",
+  "version": "2.1.0",
+  "npm-shrinkwrap-version": "200.5.1",
+  "node-version": "v4.4.3",
   "dependencies": {
     "djson": {
       "version": "2.0.2",
