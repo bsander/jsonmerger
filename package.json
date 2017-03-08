@@ -5,8 +5,7 @@
   "main": "lib/jsonmerger.js",
   "directories": {
     "lib": "lib",
-    "test": "test",
-    "doc": "doc"
+    "test": "test"
   },
   "scripts": {
     "test": "grunt"
