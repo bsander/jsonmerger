@@ -365,7 +365,7 @@ describe('jsonMerger', function () {
       });
     });
     it('should properly merge the environments file based on env variable (2)', function () {
-      process.env.NODE_ENV = 'devenv;';
+      process.env.NODE_ENV = 'devenv';
       os.hostname = sinon.stub().returns('localhost');
 
       result = jsonMerger(files);
