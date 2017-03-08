@@ -8,7 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "grunt"
+    "test": "eslint . && mocha test/*.spec.js"
   },
   "repository": {
     "type": "git",
@@ -32,13 +32,8 @@
   },
   "devDependencies": {
     "chai": "^3.4.1",
-    "grunt": "^0.4.5",
-    "grunt-contrib-jshint": "^0.12.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-docker": "0.0.10",
-    "grunt-mocha-test": "^0.12.2",
-    "grunt-open": "^0.2.3",
-    "matchdep": "^1.0.0",
+    "eslint": "^3.17.1",
+    "eslint-config-mm": "^1.1.1",
     "mocha": "^2.0.1",
     "proxyquire": "^1.0.1",
     "sinon": "^1.11.0",
