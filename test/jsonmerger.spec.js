@@ -1,5 +1,5 @@
+'use strict';
 describe('jsonMerger', function () {
-  'use strict';
 
   var chai = require('chai');
   var sinonChai = require('sinon-chai');
@@ -336,7 +336,7 @@ describe('jsonMerger', function () {
       });
     });
     it('should properly merge the environments file based on env variable (1)', function () {
-      process.env.NODE_ENV = 'prodenv'
+      process.env.NODE_ENV = 'prodenv';
       os.hostname = sinon.stub().returns('localhost');
 
       result = jsonMerger(files);
@@ -365,7 +365,7 @@ describe('jsonMerger', function () {
       });
     });
     it('should properly merge the environments file based on env variable (2)', function () {
-      process.env.NODE_ENV = 'devenv'
+      process.env.NODE_ENV = 'devenv;';
       os.hostname = sinon.stub().returns('localhost');
 
       result = jsonMerger(files);
