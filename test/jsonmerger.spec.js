@@ -84,8 +84,8 @@ describe('jsonMerger', function () {
       },
       dev: {
         hosts: ['devhost'],
+        env: 'devenv',
         config: {
-          env: 'devenv',
           instances: {
             '*': {
               x: [4],
@@ -314,7 +314,7 @@ describe('jsonMerger', function () {
       delete result.set;
 
       expect(result).to.deep.equal({
-        env: ec.dev.config.env,
+        env: ec.prod.config.env,
         foo: dc.foo,
         something: ec.prod.config.something,
         instances: {
@@ -373,7 +373,7 @@ describe('jsonMerger', function () {
       delete result.set;
 
       expect(result).to.deep.equal({
-        env: ec.dev.config.env,
+        env: ec.prod.config.env,
         foo: dc.foo,
         something: ec.prod.config.something,
         instances: {
