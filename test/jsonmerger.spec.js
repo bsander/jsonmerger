@@ -84,8 +84,8 @@ describe('jsonMerger', function () {
       },
       dev: {
         hosts: ['devhost'],
+        env: 'devenv',
         config: {
-          env: 'devenv',
           instances: {
             '*': {
               x: [4],
@@ -314,7 +314,7 @@ describe('jsonMerger', function () {
       delete result.set;
 
       expect(result).to.deep.equal({
-        env: ec.dev.config.env,
+        env: ec.prod.config.env,
         foo: dc.foo,
         something: ec.prod.config.something,
         instances: {
@@ -373,7 +373,7 @@ describe('jsonMerger', function () {
       delete result.set;
 
       expect(result).to.deep.equal({
-        env: ec.dev.config.env,
+        env: ec.prod.config.env,
         foo: dc.foo,
         something: ec.prod.config.something,
         instances: {
@@ -538,7 +538,6 @@ describe('jsonMerger', function () {
       });
       it('should properly handle the noconcat strategy on environments', function () {
         var files = ['defaults', 'instances', 'environments'];
-        os.hostname = sinon.stub().returns('prodhost');
         dcin.testproperty = ['foo'];
         icin.testproperty = ['bar'];
         ecin.prod.config = {
@@ -653,7 +652,6 @@ describe('jsonMerger', function () {
       });
       it('should properly handle the replace strategy on environments', function () {
         var files = ['defaults', 'instances', 'environments'];
-        os.hostname = sinon.stub().returns('prodhost');
         ecin.prod.config._strategy = 'replace';
 
         result = jsonMerger(files);
@@ -667,7 +665,6 @@ describe('jsonMerger', function () {
       });
       it('should properly handle the replace strategy on environment properties', function () {
         var files = ['defaults', 'instances', 'environments'];
-        os.hostname = sinon.stub().returns('prodhost');
         icin.testproperty = {
           foo: 'bar'
         };
@@ -742,7 +739,6 @@ describe('jsonMerger', function () {
       });
       it('should properly handle the delete strategy on environments', function () {
         var files = ['defaults', 'instances', 'environments'];
-        os.hostname = sinon.stub().returns('prodhost');
         ecin.prod.config._strategy = 'delete';
 
         result = jsonMerger(files);
@@ -750,7 +746,6 @@ describe('jsonMerger', function () {
       });
       it('should properly handle the delete strategy on environment properties', function () {
         var files = ['defaults', 'instances', 'environments'];
-        os.hostname = sinon.stub().returns('prodhost');
         icin.testproperty = {
           foo: 'bar'
         };
