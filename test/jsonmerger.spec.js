@@ -1,23 +1,23 @@
 'use strict';
-describe('jsonMerger', function () {
+describe('jsonMerger', () => {
 
-  var chai = require('chai');
-  var sinonChai = require('sinon-chai');
+  const chai = require('chai');
+  const sinonChai = require('sinon-chai');
   chai.use(sinonChai);
-  var expect = chai.expect;
-  var sinon = require('sinon');
+  const expect = chai.expect;
+  const sinon = require('sinon');
 
-  var proxyquire = require('proxyquire').noCallThru();
-  var os;
+  const proxyquire = require('proxyquire').noCallThru();
+  let os;
 
-  var jsonMerger;
-  var result;
-  var dc;
-  var ic;
-  var ec;
-  var dcin;
-  var icin;
-  var ecin;
+  let jsonMerger;
+  let result;
+  let dc;
+  let ic;
+  let ec;
+  let dcin;
+  let icin;
+  let ecin;
 
   function defaultConfig() {
     return {
@@ -100,7 +100,7 @@ describe('jsonMerger', function () {
     };
   }
 
-  beforeEach(function () {
+  beforeEach(() => {
     result = undefined;
     os = {
       hostname: sinon.stub().returns('prodhost')
@@ -120,19 +120,19 @@ describe('jsonMerger', function () {
     ic = instancesConfig();
     ec = environmentsConfig();
   });
-  describe('with a single config file', function () {
-    var files = ['defaults'];
-    it('should retain all global properties', function () {
+  describe('with a single config file', () => {
+    const files = ['defaults'];
+    it('should retain all global properties', () => {
       result = jsonMerger(files);
       expect(result.foo).to.deep.equal(dc.foo);
       expect(result.something).to.deep.equal(dc.something);
     });
-    it('should drop the `*` instance from the config', function () {
+    it('should drop the `*` instance from the config', () => {
       result = jsonMerger(files);
       expect(Object.keys(result.instances)).to.have.length(1);
       expect(result.instances).to.not.have.key('*');
     });
-    it('should properly merge each instance with *', function () {
+    it('should properly merge each instance with *', () => {
       result = jsonMerger(files);
       expect(result.instances.unittest).to.deep.equal({
         a: dc.instances['*'].a,
@@ -146,20 +146,20 @@ describe('jsonMerger', function () {
         }
       });
     });
-    it('should add a getter and setter method to the result object', function () {
+    it('should add a getter and setter method to the result object', () => {
       result = jsonMerger(files);
       expect(result.get).to.be.a.function;
       expect(result.set).to.be.a.function;
     });
   });
-  describe('with two (or more) regular config files', function () {
-    var files = ['defaults', 'instances'];
-    it('should merge global variables in order', function () {
+  describe('with two (or more) regular config files', () => {
+    const files = ['defaults', 'instances'];
+    it('should merge global variables in order', () => {
       result = jsonMerger(files);
       expect(result.foo).to.deep.equal(dc.foo);
       expect(result.something).to.deep.equal(ic.something);
     });
-    it('should properly merge the * instances (1)', function () {
+    it('should properly merge the * instances (1)', () => {
       dcin.instances.tmptest = {};
 
       result = jsonMerger(files);
@@ -175,7 +175,7 @@ describe('jsonMerger', function () {
         }
       });
     });
-    it('should properly merge the * instances (2)', function () {
+    it('should properly merge the * instances (2)', () => {
       icin.instances.tmptest = {};
 
       result = jsonMerger(files);
@@ -191,7 +191,7 @@ describe('jsonMerger', function () {
         }
       });
     });
-    it('should properly merge nested * instances', function () {
+    it('should properly merge nested * instances', () => {
       dcin.instances['*'].subinstances = {
         _instances: true,
         '*': {
@@ -246,12 +246,12 @@ describe('jsonMerger', function () {
         }
       });
     });
-    it('should drop the `*` instance from the config', function () {
+    it('should drop the `*` instance from the config', () => {
       result = jsonMerger(files);
       expect(Object.keys(result.instances)).to.have.length(1);
       expect(result.instances).to.not.have.key('*');
     });
-    it('should merge project instances in correct order', function () {
+    it('should merge project instances in correct order', () => {
       result = jsonMerger(files);
       expect(result.instances.unittest).to.deep.equal({
         a: dc.instances['*'].a,
@@ -267,20 +267,20 @@ describe('jsonMerger', function () {
         }
       });
     });
-    it('should add a getter and setter method to the result object', function () {
+    it('should add a getter and setter method to the result object', () => {
       result = jsonMerger(files);
       expect(result.get).to.be.a.function;
       expect(result.set).to.be.a.function;
     });
   });
-  describe('with an environments config file', function () {
-    var files = ['defaults', 'instances', 'environments'];
-    it('should remove the preprocess directive when done', function () {
+  describe('with an environments config file', () => {
+    const files = ['defaults', 'instances', 'environments'];
+    it('should remove the preprocess directive when done', () => {
       result = jsonMerger(files);
       expect(ecin).to.not.have.keys('_preprocess');
       expect(result).to.not.have.keys('_preprocess');
     });
-    it('should properly merge the environments file based on host (1)', function () {
+    it('should properly merge the environments file based on host (1)', () => {
       result = jsonMerger(files);
       delete result.get;
       delete result.set;
@@ -306,7 +306,7 @@ describe('jsonMerger', function () {
         },
       });
     });
-    it('should properly merge the environments file based on host (2)', function () {
+    it('should properly merge the environments file based on host (2)', () => {
       os.hostname = sinon.stub().returns('devhost');
 
       result = jsonMerger(files);
@@ -335,7 +335,7 @@ describe('jsonMerger', function () {
         }
       });
     });
-    it('should properly merge the environments file based on env variable (1)', function () {
+    it('should properly merge the environments file based on env variable (1)', () => {
       process.env.NODE_ENV = 'prodenv';
       os.hostname = sinon.stub().returns('localhost');
 
@@ -364,7 +364,7 @@ describe('jsonMerger', function () {
         },
       });
     });
-    it('should properly merge the environments file based on env variable (2)', function () {
+    it('should properly merge the environments file based on env variable (2)', () => {
       process.env.NODE_ENV = 'devenv';
       os.hostname = sinon.stub().returns('localhost');
 
@@ -394,20 +394,20 @@ describe('jsonMerger', function () {
         }
       });
     });
-    it('should drop the `*` instance from the config', function () {
+    it('should drop the `*` instance from the config', () => {
       result = jsonMerger(files);
       expect(Object.keys(result.instances)).to.have.length(1);
       expect(result.instances).to.not.have.key('*');
     });
-    it('should add a getter and setter method to the result object', function () {
+    it('should add a getter and setter method to the result object', () => {
       result = jsonMerger(files);
       expect(result.get).to.be.a.function;
       expect(result.set).to.be.a.function;
     });
   });
-  describe('using alternative merge strategy', function () {
-    describe('noconcat', function () {
-      it('should properly merge each instance with *', function () {
+  describe('using alternative merge strategy', () => {
+    describe('noconcat', () => {
+      it('should properly merge each instance with *', () => {
         dcin.instances.unittest._strategy = 'noconcat';
         result = jsonMerger(['defaults']);
 
@@ -423,7 +423,7 @@ describe('jsonMerger', function () {
           }
         });
       });
-      it('should properly merge the * instances', function () {
+      it('should properly merge the * instances', () => {
         dcin.instances.tmptest = {};
         icin.instances['*']._strategy = 'noconcat';
         result = jsonMerger(['defaults', 'instances']);
@@ -440,7 +440,7 @@ describe('jsonMerger', function () {
           }
         });
       });
-      it('should merge project instances in correct order (1)', function () {
+      it('should merge project instances in correct order (1)', () => {
         dcin.instances.unittest._strategy = 'noconcat';
         result = jsonMerger(['defaults', 'instances']);
 
@@ -458,7 +458,7 @@ describe('jsonMerger', function () {
           }
         });
       });
-      it('should merge project instances in correct order (2)', function () {
+      it('should merge project instances in correct order (2)', () => {
         icin.instances['*']._strategy = 'noconcat';
         result = jsonMerger(['defaults', 'instances']);
 
@@ -476,7 +476,7 @@ describe('jsonMerger', function () {
           }
         });
       });
-      it('should merge project instances in correct order (3)', function () {
+      it('should merge project instances in correct order (3)', () => {
         icin.instances.unittest._strategy = 'noconcat';
         result = jsonMerger(['defaults', 'instances']);
 
@@ -494,7 +494,7 @@ describe('jsonMerger', function () {
           }
         });
       });
-      it('should properly merge objects from the highest level', function () {
+      it('should properly merge objects from the highest level', () => {
         dcin.y = [0];
         icin.y = [1];
         icin._strategy = 'noconcat';
@@ -515,7 +515,7 @@ describe('jsonMerger', function () {
           }
         });
       });
-      it('should merge deeply nested project instances in correct order', function () {
+      it('should merge deeply nested project instances in correct order', () => {
         dcin.instances.unittest.deeper.y = [0];
         icin.instances.unittest.deeper.y = [1];
         icin.instances.unittest.deeper._strategy = 'noconcat';
@@ -536,8 +536,8 @@ describe('jsonMerger', function () {
           }
         });
       });
-      it('should properly handle the noconcat strategy on environments', function () {
-        var files = ['defaults', 'instances', 'environments'];
+      it('should properly handle the noconcat strategy on environments', () => {
+        const files = ['defaults', 'instances', 'environments'];
         dcin.testproperty = ['foo'];
         icin.testproperty = ['bar'];
         ecin.prod.config = {
@@ -552,8 +552,8 @@ describe('jsonMerger', function () {
         expect(result.testproperty).to.deep.equal(['lorem']);
       });
     });
-    describe('replace', function () {
-      it('should properly merge each instance with *', function () {
+    describe('replace', () => {
+      it('should properly merge each instance with *', () => {
         dcin.instances.unittest._strategy = 'replace';
         result = jsonMerger(['defaults']);
 
@@ -567,7 +567,7 @@ describe('jsonMerger', function () {
           }
         });
       });
-      it('should properly merge the * instances', function () {
+      it('should properly merge the * instances', () => {
         dcin.instances.tmptest = {};
         icin.instances['*']._strategy = 'replace';
         result = jsonMerger(['defaults', 'instances']);
@@ -581,7 +581,7 @@ describe('jsonMerger', function () {
           }
         });
       });
-      it('should merge project instances in correct order (1)', function () {
+      it('should merge project instances in correct order (1)', () => {
         dcin.instances.unittest._strategy = 'replace';
         result = jsonMerger(['defaults', 'instances']);
 
@@ -597,7 +597,7 @@ describe('jsonMerger', function () {
           }
         });
       });
-      it('should merge project instances in correct order (2)', function () {
+      it('should merge project instances in correct order (2)', () => {
         icin.instances.unittest._strategy = 'replace';
         result = jsonMerger(['defaults', 'instances']);
 
@@ -609,7 +609,7 @@ describe('jsonMerger', function () {
           }
         });
       });
-      it('should properly merge objects from the highest level', function () {
+      it('should properly merge objects from the highest level', () => {
         dcin.someObject = {
           foo: 'foo'
         };
@@ -635,7 +635,7 @@ describe('jsonMerger', function () {
           }
         });
       });
-      it('should merge deeply nested project instances in correct order', function () {
+      it('should merge deeply nested project instances in correct order', () => {
         icin.instances.unittest.deeper._strategy = 'replace';
         result = jsonMerger(['defaults', 'instances']);
 
@@ -650,8 +650,8 @@ describe('jsonMerger', function () {
           }
         });
       });
-      it('should properly handle the replace strategy on environments', function () {
-        var files = ['defaults', 'instances', 'environments'];
+      it('should properly handle the replace strategy on environments', () => {
+        const files = ['defaults', 'instances', 'environments'];
         ecin.prod.config._strategy = 'replace';
 
         result = jsonMerger(files);
@@ -663,8 +663,8 @@ describe('jsonMerger', function () {
           something: 'environments prod global something'
         });
       });
-      it('should properly handle the replace strategy on environment properties', function () {
-        var files = ['defaults', 'instances', 'environments'];
+      it('should properly handle the replace strategy on environment properties', () => {
+        const files = ['defaults', 'instances', 'environments'];
         icin.testproperty = {
           foo: 'bar'
         };
@@ -682,21 +682,21 @@ describe('jsonMerger', function () {
         });
       });
     });
-    describe('delete', function () {
-      it('should properly merge each instance with *', function () {
+    describe('delete', () => {
+      it('should properly merge each instance with *', () => {
         dcin.instances.unittest._strategy = 'delete';
         result = jsonMerger(['defaults']);
 
         expect(result.instances.unittest).to.be.undefined;
       });
-      it('should properly merge the * instances', function () {
+      it('should properly merge the * instances', () => {
         dcin.instances.tmptest = {};
         icin.instances['*']._strategy = 'delete';
         result = jsonMerger(['defaults', 'instances']);
 
         expect(result.instances.tmptest).to.be.undefined;
       });
-      it('should merge project instances in correct order (1)', function () {
+      it('should merge project instances in correct order (1)', () => {
         dcin.instances.unittest._strategy = 'delete';
         result = jsonMerger(['defaults', 'instances']);
 
@@ -710,25 +710,25 @@ describe('jsonMerger', function () {
           }
         });
       });
-      it('should merge project instances in correct order (2)', function () {
+      it('should merge project instances in correct order (2)', () => {
         icin.instances.unittest._strategy = 'delete';
         result = jsonMerger(['defaults', 'instances']);
 
         expect(result.instances.unittest).to.be.undefined;
       });
-      it('should properly merge objects from the highest level', function () {
+      it('should properly merge objects from the highest level', () => {
         icin._strategy = 'delete';
         result = jsonMerger(['defaults', 'instances']);
 
         expect(result).to.be.undefined;
       });
-      it('should merge deeply nested project instances in correct order', function () {
+      it('should merge deeply nested project instances in correct order', () => {
         icin.instances.unittest.deeper._strategy = 'delete';
         result = jsonMerger(['defaults', 'instances']);
 
         expect(result.instances.unittest.deeper).to.be.undefined;
       });
-      it('should not delete null values when configured', function () {
+      it('should not delete null values when configured', () => {
         dcin.instances.tmptest = {};
         icin.instances['*']._strategy = 'delete';
         result = jsonMerger(['defaults', 'instances'], {
@@ -737,15 +737,15 @@ describe('jsonMerger', function () {
 
         expect(result.instances.tmptest).to.be.null;
       });
-      it('should properly handle the delete strategy on environments', function () {
-        var files = ['defaults', 'instances', 'environments'];
+      it('should properly handle the delete strategy on environments', () => {
+        const files = ['defaults', 'instances', 'environments'];
         ecin.prod.config._strategy = 'delete';
 
         result = jsonMerger(files);
         expect(result).to.be.undefined;
       });
-      it('should properly handle the delete strategy on environment properties', function () {
-        var files = ['defaults', 'instances', 'environments'];
+      it('should properly handle the delete strategy on environment properties', () => {
+        const files = ['defaults', 'instances', 'environments'];
         icin.testproperty = {
           foo: 'bar'
         };
