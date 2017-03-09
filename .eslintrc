@@ -1,4 +1,4 @@
 {
   "root": true,
-  "extends": ["eslint-config-mm/es5"]
+  "extends": ["eslint-config-mm"]
 }
