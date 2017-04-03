@@ -151,6 +151,46 @@ describe('jsonMerger', () => {
       expect(result.get).to.be.a.function;
       expect(result.set).to.be.a.function;
     });
+    it('should properly merge arrays from nested wildcards', () => {
+      icin = {
+        level1: {
+          _instances: true,
+          '*': {
+            level2: {
+              _instances: true,
+              '*': {
+                array: [
+                  'one',
+                ]
+              },
+              specific2: {
+                _strategy: 'noconcat',
+                array: [
+                  'two',
+                ]
+              }
+            }
+          },
+          specific1: {
+            level2: {
+              specific2: {
+                array: [
+                  'three'
+                ]
+              }
+            }
+          }
+        }
+      };
+      jsonMerger = proxyquire('../lib/jsonmerger', {
+        os: os,
+        defaults: dcin,
+        instances: icin,
+        environments: ecin
+      });
+      result = jsonMerger(['instances']);
+      expect(result.level1.specific1.level2.specific2.array).to.equal(['two', 'three']);
+    });
   });
   describe('with two (or more) regular config files', () => {
     const files = ['defaults', 'instances'];
