@@ -110,7 +110,7 @@ describe('jsonMerger', () => {
     icin = instancesConfig();
     ecin = environmentsConfig();
     jsonMerger = proxyquire('../lib/jsonmerger', {
-      os: os,
+      os,
       defaults: dcin,
       instances: icin,
       environments: ecin
@@ -183,7 +183,7 @@ describe('jsonMerger', () => {
         }
       };
       jsonMerger = proxyquire('../lib/jsonmerger', {
-        os: os,
+        os,
         defaults: dcin,
         instances: icin,
         environments: ecin
