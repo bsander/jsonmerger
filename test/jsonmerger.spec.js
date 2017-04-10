@@ -189,7 +189,7 @@ describe('jsonMerger', () => {
         environments: ecin
       });
       result = jsonMerger(['instances']);
-      expect(result.level1.specific1.level2.specific2.array).to.equal(['two', 'three']);
+      expect(result.level1.specific1.level2.specific2.array).to.deep.equal(['two', 'three']);
     });
   });
   describe('with two (or more) regular config files', () => {
