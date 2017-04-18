@@ -110,7 +110,7 @@ describe('jsonMerger', () => {
     icin = instancesConfig();
     ecin = environmentsConfig();
     jsonMerger = proxyquire('../lib/jsonmerger', {
-      os,
+      os: os,
       defaults: dcin,
       instances: icin,
       environments: ecin
@@ -183,7 +183,7 @@ describe('jsonMerger', () => {
         }
       };
       jsonMerger = proxyquire('../lib/jsonmerger', {
-        os,
+        os: os,
         defaults: dcin,
         instances: icin,
         environments: ecin
@@ -285,6 +285,50 @@ describe('jsonMerger', () => {
           five: 5
         }
       });
+    });
+    it('should properly merge arrays from nested wildcards when instances are configured in the default', () => {
+      dcin = {
+        level1: {
+          _instances: true,
+          '*': {
+            level2: {
+              _instances: true
+            }
+          }
+        }
+      };
+      icin = {
+        level1: {
+          '*': {
+            level2: {
+              '*': {
+                array: [
+                  'one',
+                ]
+              },
+              specific2: {
+                _strategy: 'noconcat',
+                array: [
+                  'two',
+                ]
+              }
+            }
+          },
+          specific1: {
+            level2: {
+              specific2: {}
+            }
+          }
+        }
+      };
+      jsonMerger = proxyquire('../lib/jsonmerger', {
+        os: os,
+        defaults: dcin,
+        instances: icin,
+        environments: ecin
+      });
+      result = jsonMerger(files);
+      expect(result.level1.specific1.level2.specific2.array).to.deep.equal(['two']);
     });
     it('should drop the `*` instance from the config', () => {
       result = jsonMerger(files);
