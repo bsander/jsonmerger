@@ -478,12 +478,6 @@ has-flag@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-1.0.0.tgz#9d9e793165ce017a00f00418c43f942a7b1d11fa"
 
-highland@^2.10.5:
-  version "2.10.5"
-  resolved "https://registry.yarnpkg.com/highland/-/highland-2.10.5.tgz#6007fd24f4838d9117ba41bdcc98ec3b54bfde18"
-  dependencies:
-    util-deprecate "^1.0.2"
-
 ignore@^3.2.0:
   version "3.2.7"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-3.2.7.tgz#4810ca5f1d8eca5595213a34b94f2eb4ed926bbd"

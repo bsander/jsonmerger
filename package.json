@@ -27,7 +27,6 @@
   "homepage": "https://github.com/bsander/jsonmerger",
   "dependencies": {
     "djson": "^2.0.2",
-    "highland": "^2.10.5",
     "lodash": "^4.17.4",
     "traverse": "^0.6.6"
   },
